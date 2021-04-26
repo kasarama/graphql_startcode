@@ -54,7 +54,7 @@ const typeDefs = `
 
         editMe(input: FriendEditInput): Friend
 
-        deleteFriend(email: String) : Boolean
+        deleteFriend(input: String) : Boolean
     }
 `;
 

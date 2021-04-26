@@ -90,13 +90,15 @@ export const resolvers = {
         context.credentials.role == "admin"
       ) {
         const email = context.credentials.userName;
+        console.log("INPUT  ", input);
+
         return friendFacade.editFriendV2(input.email, input);
       } else throw new ApiError("Not Authorized", 401);
     },
 
     deleteFriend: async (
       _: object,
-      { input }: { input: IFriend },
+      { input }: { input: string },
       context: any
     ) => {
       if (
@@ -104,8 +106,8 @@ export const resolvers = {
         context.credentials.role &&
         context.credentials.role == "admin"
       ) {
-        const email = context.credentials.userName;
-        return friendFacade.deleteFriend(email);
+        console.log("INPUT  ", input);
+        return friendFacade.deleteFriend(input);
       } else throw new ApiError("Not Authorized", 401);
     },
   },
