@@ -58,7 +58,6 @@ class FriendsFacade {
     f.firstName && (fieldsToUpdate.firstName = f.firstName);
     f.lastName && (fieldsToUpdate.lastName = f.lastName);
     f.password && (fieldsToUpdate.password = f.password);
-
     const result = await this.friendCollection.findOneAndUpdate(
       { email },
       {

@@ -13,7 +13,7 @@ import friendRouts from "./routes/friendRoutsAuth";
 import nameRouts from "./routes/nameRouts";
 
 var corsOptions = {
-  origin: "http://localhost:5252/",
+  origin: "http://localhost:3000/",
   optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
 };
 const morganFormat = process.env.NODE_ENV == "production" ? "combined" : "dev";
@@ -72,9 +72,10 @@ import myCors from "./middleware/myCors";
 
 //node cors
 import cors from "cors";
-
+app.use(cors());
 app.use("/api/dummyFriends", cors(corsOptions), dummyFrienRouts);
-app.use("/api/friends", cors(corsOptions), friendRouts);
+//app.use("/api/friends", cors(corsOptions), friendRouts);
+app.use("/api/friends", cors(), friendRouts);
 app.use("/api/name", cors(corsOptions), nameRouts);
 
 import { graphqlHTTP } from "express-graphql";
@@ -130,7 +131,8 @@ app.use(
 );
 
 app.use(
-  cors(corsOptions),
+  myCors,
+  // cors(corsOptions),
   (err: any, req: Request, res: Response, next: Function) => {
     if (err instanceof ApiError) {
       //const e:ApiError= err

@@ -4,7 +4,7 @@ const router = express.Router();
 import { ApiError } from "../errors/apiErrors";
 import FriendFacade from "../facades/friendFacade";
 const debug = require("debug")("friend-routes");
-
+import base64 from "base-64";
 let facade: FriendFacade;
 // Initialize facade using the database set on the application object
 router.use(async (req, res, next) => {
@@ -16,7 +16,15 @@ router.use(async (req, res, next) => {
 
   next();
 });
-
+router.post("/login", async (req, res, next) => {
+  const { userName, password } = req.body;
+  const user = await facade.getVerifiedUser(userName, password);
+  if (!user) {
+    return next(new ApiError("Failed to login", 400));
+  }
+  const base64AuthString = "Basic " + base64.encode(userName + ":" + password);
+  res.json({ base64AuthString, user: user.email, role: user.role });
+});
 // This does NOT require authentication in order to let new users create themself
 router.post("/", async (req, res, next) => {
   try {
@@ -49,8 +57,8 @@ router.get(
   "/demo",
   async (req: any, res) => {
     res.json({ demo: "HEEEEEEEEEEEJ" });
-  },
-  authMiddleware
+  }
+  //authMiddleware
 );
 
 router.get("/all", async (req: any, res) => {
@@ -155,7 +163,7 @@ router.delete("/:email", async function (req: any, res, next) {
     }
     const email = req.params.email; //null; //GET THE USERS EMAIL FROM SOMEWHERE (req.params OR req.credentials.userName)
 
-    res.json({deleted:await facade.deleteFriend(email)});
+    res.json({ deleted: await facade.deleteFriend(email) });
   } catch (err) {
     debug(err);
     if (err instanceof ApiError) {
