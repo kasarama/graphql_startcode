@@ -37,6 +37,59 @@ describe("## Verify the Positions Facade ##", () => {
 
   beforeEach(async () => {
     //TODO -->/// INSERT CODE_BLOCK-2
+
+    const hashedPW = await hash("secret", 8);
+    await friendsCollection.deleteMany({});
+
+    const f1 = {
+      firstName: "Peter",
+      lastName: "Pan",
+      email: "pp@b.dk",
+      password: hashedPW,
+      role: "user",
+    };
+    const f2 = {
+      firstName: "Donald",
+      lastName: "Duck",
+      email: "dd@b.dk",
+      password: hashedPW,
+      role: "user",
+    };
+    const f3 = {
+      firstName: "Peter",
+      lastName: "Admin",
+      email: "peter@admin.dk",
+      password: hashedPW,
+      role: "admin",
+    };
+
+    const status = await friendsCollection.insertMany([f1, f2, f3]);
+    await positionCollection.deleteMany({});
+
+    const positions = [
+      positionCreator(
+        12.48,
+        55.77,
+        f1.email,
+        f1.firstName + " " + f1.lastName,
+        true
+      ),
+      positionCreator(
+        12.48,
+        getLatitudeInside(55.77, DIST_TO_SEARCH),
+        f2.email,
+        f2.firstName + " " + f2.lastName,
+        true
+      ),
+      positionCreator(
+        12.58,
+        getLatitudeOutside(55.77, DIST_TO_SEARCH),
+        f3.email,
+        f3.firstName + " " + f3.lastName,
+        true
+      ),
+    ];
+    await positionCollection.insertMany(positions);
   });
 
   describe("Verify the addOrUpdatePosition method", () => {
