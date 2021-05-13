@@ -4,8 +4,17 @@ import { ApiError } from "../errors/apiErrors";
 import { Request } from "express";
 import fetch from "node-fetch";
 import e from "cors";
+import PositionFacade from "../facades/positionFacade";
 
 let friendFacade: FriendFacade;
+
+let positionFacade: PositionFacade;
+
+type PositionInput = {
+  email: string;
+  longitude: number;
+  latitude: number;
+};
 
 /*
 We don't have access to app or the Router so we need to set up the facade in another way
@@ -16,6 +25,9 @@ Just before the line where you start the server
 export function setupFacade(db: any) {
   if (!friendFacade) {
     friendFacade = new FriendFacade(db);
+  }
+  if (!positionFacade) {
+    positionFacade = new PositionFacade(db);
   }
 }
 
@@ -90,7 +102,6 @@ export const resolvers = {
         context.credentials.role == "admin"
       ) {
         const email = context.credentials.userName;
-        console.log("INPUT  ", input);
 
         return friendFacade.editFriendV2(input.email, input);
       } else throw new ApiError("Not Authorized", 401);
@@ -106,9 +117,19 @@ export const resolvers = {
         context.credentials.role &&
         context.credentials.role == "admin"
       ) {
-        console.log("INPUT  ", input);
         return friendFacade.deleteFriend(input);
       } else throw new ApiError("Not Authorized", 401);
+    },
+    addPosition: async (_: object, input: PositionInput, context: any) => {
+      try {
+        return positionFacade.addOrUpdatePosition(
+          input.email,
+          input.longitude,
+          input.latitude
+        );
+      } catch (err) {
+        return false;
+      }
     },
   },
 };
