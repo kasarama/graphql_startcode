@@ -119,12 +119,20 @@ router.get("/find-user/:email", async (req: any, res, next) => {
       throw new ApiError("Not Authorized", 401);
     }
     const userId = req.params.email;
-    const friend = await facade.getFriend(userId);
-    if (friend == null) {
-      next(new ApiError("user not found", 404));
+    try {
+      const friend = await facade.getFriend(userId);
+      res.json(friend);
+    } catch (err) {
+      console.log("Get USER")
+      console.log(err)
+      next(err);
     }
+    // const friend = await facade.getFriend(userId);
+    // if (friend === null) {
+    //   next(new ApiError("user not found", 404));
+    // }
 
-    res.json(friend);
+    // res.json(friend);
   } catch (err) {
     next(err);
   }

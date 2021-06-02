@@ -133,7 +133,7 @@ describe("### Describe the Friend Endpoints (/api/friends) ###", function () {
 
 
     });
-    it("It should not, allow admin-users to find a non-existing user", async () => {
+    it("It should not allow admin-users to find a non-existing user", async () => {
       const response = await request
       .get("/api/friends/find-user/dddd@b.dk")
       .auth("aa@a.dk", "secret");

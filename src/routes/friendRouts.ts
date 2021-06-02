@@ -20,6 +20,7 @@ router.use(async (req, res, next) => {
 router.post('/', async function (req, res, next) {
   try {
     let newFriend = req.body;
+    console.log('\n\n\NOt finished\n\n')
     //#####################################
     throw new Error("COMPLETE THIS METHOD")
     //#####################################

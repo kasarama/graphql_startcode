@@ -3,7 +3,6 @@ import { IFriend } from "../interfaces/IFriend";
 import { ApiError } from "../errors/apiErrors";
 import { Request } from "express";
 import fetch from "node-fetch";
-import e from "cors";
 import PositionFacade from "../facades/positionFacade";
 
 let friendFacade: FriendFacade;

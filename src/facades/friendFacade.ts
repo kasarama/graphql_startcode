@@ -199,6 +199,7 @@ class FriendsFacade {
     if (result.length != 0) {
       return fToDTO(result[0]);
     } else {
+      console.log('\n\n\nFRIEND NOT FOUND 404\n\n\n')
       throw new ApiError("friend not found", 404);
     }
   }

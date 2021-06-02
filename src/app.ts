@@ -4,7 +4,8 @@ import path from "path";
 import dotenv from "dotenv";
 import dummyFrienRouts from "./routes/dummyFrinedsRouts";
 dotenv.config();
-const debug = require("DEBUG")("app");
+import debug from "debug";
+const myDebug = debug("app");
 const app = express();
 import mylogger from "./middleware/simpleLogger";
 import logger, { stream } from "./middleware/logger";
@@ -62,6 +63,7 @@ app.get("/demo", (req, res) => {
   logger.log("info", "demo requested");
   logger.log("error", "some error");
   let a = 123;
+  myDebug("It's myDebug talking");
   // a='dss' gives fail that typescripts wants it to be of the first instantiated
   res.send("Server is up!!.!");
 });
@@ -81,7 +83,9 @@ app.use("/api/name", cors(corsOptions), nameRouts);
 import { graphqlHTTP } from "express-graphql";
 import { schema } from "./graphql/schema";
 import authMiddleware from "./middleware/basic-auth";
-
+app.get("/auth", authMiddleware, (req, res) => {
+  res.send("authenticated");
+});
 //requires auth on each request to this endpoint
 //app.use("/graphql", authMiddleware);
 
@@ -144,5 +148,7 @@ app.use(
     }
   }
 );
+
+
 
 export default app;

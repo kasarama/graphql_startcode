@@ -89,7 +89,7 @@ describe("## Verify the Friends Facade ##", function () {
     it("It should change lastName to XXXX", async () => {
       const newValues = {
         firstName: "Magda",
-        lastName: "Wawrzak",
+        lastName: "XXXX",
         email: "magda@mail.com",
         password: "secret",
       };
